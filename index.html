@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#FFF8F0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="BrightSteps"/>
+<title>BrightSteps – Calendário Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --orange: #E8951A;
+    --yellow: #F5C842;
+    --blue: #4A9FD4;
+    --purple: #9B6BC5;
+    --coral: #E85A3A;
+    --bg: #FFF8F0;
+    --surface: #FFFFFF;
+    --surface2: #FEF3E2;
+    --text: #2D2416;
+    --text2: #7A6A52;
+    --text3: #B5A48A;
+    --border: #F0E4D0;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(232,149,26,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overscroll-behavior: none; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #FFFDF9 0%, #FEF3E2 100%);
+    border-bottom: 2px solid var(--border);
+    padding: 16px 16px 0;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .logo-wrap { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border); flex-shrink: 0; background: white; }
+  .logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-text { flex: 1; }
+  .brand-name { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 700; color: var(--orange); line-height: 1.1; }
+  .brand-sub { font-size: 10px; color: var(--blue); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .brand-caption { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+  .view-tabs { display: flex; gap: 6px; }
+  .tab-btn { padding: 6px 14px; border-radius: 20px; border: none; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all .2s; }
+  .tab-btn.active { background: var(--orange); color: white; box-shadow: 0 2px 10px rgba(232,149,26,0.35); }
+  .tab-btn.inactive { background: white; color: var(--text3); border: 1.5px solid var(--border); }
+
+  /* MONTH NAV */
+  .month-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .nav-btn { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; color: var(--orange); font-weight: 800; }
+  .month-title { font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); flex: 1; }
+  .month-title span { color: var(--text3); font-size: 14px; font-weight: 500; }
+  .today-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--orange); background: white; color: var(--orange); font-size: 11px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+  /* PLATFORM FILTER */
+  .filter-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+  .filter-chip { flex-shrink: 0; padding: 4px 12px; border-radius: 20px; border: 1.5px solid; font-size: 11px; font-weight: 800; cursor: pointer; transition: all .2s; font-family: 'Nunito', sans-serif; }
+
+  /* STATS */
+  .stats-row { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 4px; scrollbar-width: none; }
+  .stats-row::-webkit-scrollbar { display: none; }
+  .stat-chip { flex-shrink: 0; padding: 7px 12px; border-radius: 12px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
+
+  /* CALENDAR GRID */
+  .cal-wrap { padding: 12px 16px 100px; }
+  .day-headers { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 4px; }
+  .day-hdr { text-align: center; font-size: 10px; font-weight: 800; color: var(--text3); letter-spacing: .5px; padding: 3px 0; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+  .cal-cell {
+    min-height: 70px; border-radius: 12px; padding: 5px;
+    background: white; border: 1.5px solid var(--border);
+    cursor: pointer; transition: all .15s; position: relative;
+  }
+  .cal-cell:hover { border-color: var(--orange); box-shadow: 0 2px 12px rgba(232,149,26,0.15); }
+  .cal-cell.today { background: #FEF3E2; border-color: var(--orange); }
+  .cal-day-num { font-size: 11px; font-weight: 800; color: var(--text2); margin-bottom: 3px; }
+  .cal-cell.today .cal-day-num { color: var(--orange); }
+  .cal-post-chip { font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 2px solid; }
+  .cal-badge { position: absolute; top: 4px; right: 4px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; }
+
+  /* AGENDA */
+  .agenda-wrap { padding: 12px 16px 100px; }
+  .agenda-date-header { font-size: 11px; font-weight: 900; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; padding: 12px 0 6px; }
+  .agenda-item { padding: 12px 14px; border-radius: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; border: 1.5px solid; }
+  .agenda-time { font-size: 12px; font-weight: 800; color: var(--text2); min-width: 40px; }
+  .agenda-bar { width: 3px; height: 40px; border-radius: 2px; flex-shrink: 0; }
+  .agenda-content { flex: 1; min-width: 0; }
+  .agenda-title { font-weight: 800; font-size: 13px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .agenda-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .agenda-chip { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 800; }
+  .agenda-notes { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .agenda-actions { display: flex; gap: 5px; }
+  .icon-btn { width: 28px; height: 28px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 48px 24px; color: var(--text3); }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+  /* FAB */
+  .fab { position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; font-size: 26px; display: flex; align-items: center; justify-content: center; z-index: 100; background: linear-gradient(135deg, var(--orange), var(--yellow)); box-shadow: 0 4px 20px rgba(232,149,26,0.45); color: white; font-weight: 900; transition: transform .15s; }
+  .fab:active { transform: scale(0.93); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(45,36,22,0.55); z-index: 200; display: flex; align-items: flex-end; justify-content: center; backdrop-filter: blur(3px); }
+  .modal-sheet { width: 100%; max-width: 500px; background: white; border-radius: 24px 24px 0 0; padding: 24px; max-height: 88vh; overflow-y: auto; border-top: 3px solid var(--orange); }
+  .modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 16px; }
+  .modal-title { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+  .modal-close { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  .field-label { font-size: 10px; font-weight: 900; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .field-input { width: 100%; padding: 11px 13px; border-radius: 12px; border: 1.5px solid var(--border); font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text); outline: none; background: var(--bg); margin-bottom: 14px; }
+  .field-input:focus { border-color: var(--orange); background: white; }
+  .chip-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .sel-chip { padding: 6px 13px; border-radius: 20px; border: 1.5px solid; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all .15s; background: white; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+  .btn-delete { flex: 1; padding: 13px; border-radius: 12px; border: 1.5px solid #FFCDD2; background: #FFF5F5; color: #E53935; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+  .btn-save { flex: 2; padding: 13px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--orange), var(--yellow)); color: white; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; box-shadow: 0 3px 12px rgba(232,149,26,0.35); }
+  .btn-save:disabled { background: var(--border); color: var(--text3); box-shadow: none; cursor: not-allowed; }
+
+  /* INSTALL BANNER */
+  .install-banner { margin: 12px 16px 0; padding: 12px 14px; background: linear-gradient(135deg, #E8F5FF, #EEF5FF); border: 1.5px solid #C5DFF5; border-radius: 14px; display: flex; align-items: center; gap: 10px; }
+  .install-banner-text { flex: 1; font-size: 11px; font-weight: 700; color: var(--blue); }
+  .install-btn { padding: 6px 12px; border-radius: 10px; background: var(--blue); color: white; border: none; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 800; cursor: pointer; }
+
+  @media (prefers-color-scheme: dark) { body { background: var(--bg); } }
+</style>
+
+<script
+const iconDataUrl = "data:image/png;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAEOKADAAQAAAABAAAFRgAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8AAEQgFRgQ4AwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAQEBAQEBAgEBAgMCAgIDBAMDAwMEBgQEBAQEBgcGBgYGBgYHBwcHBwcHBwgICAgICAkJCQkJCwsLCwsLCwsLC//bAEMBAgICAwMDBQMDBQsIBggLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLC//dAAQARP/aAAwDAQACEQMRAD8A/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Q/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/R/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/S/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/U/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAJAGTX8zH/AAUD/wCCyHi0eJr74P8A7IF7HZ2Nk72974kVVlkuJBlWWz3AosY5HnYLOeYyoAZ/uT/gsX+1lcfAz4DJ8IfBl15PiTx2slszRkeZb6YnFw/ByplyIlJHIMhBDLX8gv2VfSvzrjHiWph5/UcLK0t5Nbq+yXbu/l5n9I+C3hphcfRee5tTU6d2qcJfC7bzktmr6JPS6ba2Po3Tf24P2z9J1aPWrX4qeKnmicOqzatczQkjnmKSRo2H+yVI9q/ol/4Jrf8ABWBv2hNZtvgV+0Ybey8YTjbpmpxKIbfU2A5idBhYrg4yu3CScqoVgqv/ACm/ZV9Kv6Vdajoep22taLPJaXlnKk8E8TFJI5IyGVlYYIZSAQRyDXxmVcSYvBVlU53KPWLbaa+ez8z9v4u8OMmzzBSw7oQp1UvcnGKTi+l7WvHvF6W2s7M/0bqK+Mf2B/2n4f2sf2bNG+I966/25ag6drUagDbfW4G98AAASqVlAAwofbng19nV+5YfEQr0o1qbvGSTXzP4MzLL6+BxVXBYmNqlOTjJeadvu7PqgooorY4gooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//V/v4ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAClyTjNfIn7bHx9n/Z0+Amre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
