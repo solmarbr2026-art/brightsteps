@@ -1,0 +1,13 @@
+{
+  "name": "brightsteps-bot",
+  "version": "1.0.0",
+  "description": "BrightSteps Editorial Calendar – Telegram Bot",
+  "main": "bot.js",
+  "scripts": { "start": "node bot.js" },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0",
+    "node-cron": "^3.0.3",
+    "express": "^4.18.2"
+  },
+  "engines": { "node": ">=18" }
+}
